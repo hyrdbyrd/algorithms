@@ -3,19 +3,18 @@
  * @returns {Number}
  */
 function sumOf(arr) {
-    arr = arr
-        .filter((e) => /\d+\D*/.test(e.toString()))
-        .map((e) => {
-            if (typeof e === 'string') {
-                const idx = e.search(/\D/);
-                return Number(e.slice(0, ~idx ? idx : e.length));
-            }
+    let summ = 0;
 
-            return e;
-        });
+    for (let item of arr) {
+        if (typeof item === 'string') {
+            const idx = item.search(/\D/);
+            item = Number(item.slice(0, ~idx ? idx : item.length));
+        }
 
-    if (!arr.length) return 0;
-    return arr.reduce((a, b) => a + b, 0);
+        summ += item;
+    }
+
+    return summ;
 }
 
 module.exports = sumOf;
