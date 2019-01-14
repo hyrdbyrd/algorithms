@@ -4,29 +4,24 @@
  * @param {async (...args: any) => any} func
  */
 function asyncRequestTurn(urls, limit, func) {
-    const res = {};
+    const res = [];
     limit = Math.min(urls.length, limit);
 
-
-    for (let i = 0; i < urls.length; i++) {
-        next(urls[i], i);
+    let counter = 0;
+    for (let i = 0; i < limit; i++) {
+        next(i);
     }
 
-    async function next(url, idx) {
-        await fn(url + idx).then(val => res[idx] = (val));
+    function next(idx) {
+        fn(urls[idx]).then(val => {
+            if (counter === urls.length) return func(res);
 
-        idx += limit;
+            counter++;
+            res[idx] = val;
 
-        if (idx === urls.length - 1 + limit) func(Object.values(res));
-        else if (idx >= urls.length) return;
-        next(urls[idx], idx);
+            const nextIdx = idx + limit;
+
+            if (!(idx in res) || nextIdx !== urls.length) next(nextIdx);
+        });
     }
 }
-
-async function fn(arg) {
-    for (let i = 0; i < 100000; i++);
-
-    return await arg;
-}
-
-asyncRequestTurn(['falafe.com', 'jojo.ru', 'kinco11.ua'], 1, console.log);
