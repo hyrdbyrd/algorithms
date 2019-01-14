@@ -24,7 +24,7 @@ function asyncRequestTurn(urls, limit, func) {
 }
 
 async function fn(arg) {
-    for (let i = 0; i < 100000; i++) arg += i;
+    for (let i = 0; i < 100000; i++);
 
     return await arg;
 }
