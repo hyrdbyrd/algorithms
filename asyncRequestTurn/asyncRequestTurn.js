@@ -4,22 +4,23 @@
  * @param {async (...args: any) => any} func
  * @param {async (...args: any) => any} fetch - for tests
  */
-function asyncRequestTurn(urls, limit, func, fetch) {
-    limit = Math.min(urls.length, limit);
+async function asyncRequestTurn(urls, limit, func, fetch) {
     const res = [];
+    limit = Math.min(urls.length, limit);
+    let count = 0;
 
-    let nextIdx = limit;
-
-    const next = async i => {
-        await fetch(urls[i])
-            .then(e => {
-                res[i] = e;
-                if (nextIdx >= urls.length) return res.map(e => func(e));
-                next(nextIdx++);
-            });
-    };
-
-    for (let i = 0; i < limit; i++) next(i);
+    urls
+        .slice(0, limit)
+        .map((_, i) => i)
+        .forEach(async i => {
+            for (; i < urls.length; i += limit) {
+                fetch(urls[i]).then(e => {
+                    res[i] = e;
+                    count++;
+                    if (count === urls.length) res.forEach((e, i) => urls[i] = func(e));
+                });
+            }
+        });
 }
 
 module.exports = asyncRequestTurn;
