@@ -1,7 +1,6 @@
 /**
- * @param {Array<number>} arr
- * @access formula - O(n)
- * @returns {string} zipped array as string
+ * @param {number[]} array
+ * @returns {(number | string)[]}
  */
 function zipArray(arr) {
     if (!Array.isArray(arr)) return arr;
