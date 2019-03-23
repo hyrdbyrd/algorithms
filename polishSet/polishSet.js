@@ -18,7 +18,7 @@ function polishSet(str) {
     // validation
     if (numbers.length - 1 !== operators.length)
         throw err('length of operators and length of number have difference');
-    if (numbers.some(e => !!definedOperators[e]))
+    if (operators.some(e => !definedOperators[e]))
         throw err(`not correct operator, exist ${Object.keys(definedOperators)}`);
     if (numbers.some(isNaN))
         throw err(`NaN`);
